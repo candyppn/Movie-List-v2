@@ -1,0 +1,16 @@
+{
+  "name": "tp6",
+  "version": "1.0.0",
+  "description": "Movie database",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "Candy Papin",
+  "license": "ISC",
+  "dependencies": {
+    "better-sqlite3": "^8.2.0",
+    "nodemon": "^2.0.20"
+  }
+}

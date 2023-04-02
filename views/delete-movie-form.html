@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Films : supprimer un film</title>
+</head>
+
+<body>
+
+    <h1>Supprimer un film</h1>
+    <form action="/delete-movie/{{id}}" method="post">
+        <p>Êtes-vous sûr de vouloir supprimer "{{title}}" ?</p>
+        <input type="submit" value="Oui">
+        <a href="/">Annuler</a>
+    </form>
+</body>
+
+</html>

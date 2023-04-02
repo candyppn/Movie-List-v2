@@ -1,0 +1,95 @@
+"use strict";
+
+const fs = require('fs');
+const Sqlite = require('better-sqlite3');
+
+let db = new Sqlite('db.sqlite');
+
+exports.load = function(filename) {
+  const movies = JSON.parse(fs.readFileSync(filename));
+  db.prepare('DELETE FROM movies').run(); // empty the table
+  let insert = db.prepare('INSERT INTO movies VALUES ' +
+                          '(@id, @title, @year,' +
+                          ' @actors, @plot, @poster)');
+  let clear_and_insert_many = db.transaction((movies) => {
+    for (let id of Object.keys(movies)) {
+      insert.run(movies[id]);
+    }
+  });
+  clear_and_insert_many(movies);
+  return true;
+};
+
+
+exports.save = function(filename) {
+  let movie_list = db.prepare('SELECT * FROM movies ORDER BY id').all();
+  let movies = {};
+  for (let movie of movie_list) {
+    movies[movie.id] = movie;
+  }
+  fs.writeFileSync(filename, JSON.stringify(movies));
+};
+
+exports.list = function() {
+  return db.prepare('SELECT id, title FROM movies ORDER BY id').all();
+};
+
+exports.create = function(title, year, actors, plot, poster) {
+  // Insert new movie into database
+  let id = db.prepare('INSERT INTO movies (title, year, actors, plot, poster) VALUES (?, ?, ?, ?, ?)')
+    .run(title, year, actors, plot, poster).lastInsertRowid;
+
+  // Read all movies from database and write them to movies.json
+  let movie_list = db.prepare('SELECT * FROM movies ORDER BY id').all();
+  let movies = {};
+  for (let movie of movie_list) {
+    movies[movie.id] = movie;
+  }
+  fs.writeFileSync('movies.json', JSON.stringify(movies));
+
+  return id;
+};
+
+
+
+
+exports.read = function(id) {
+  return db.prepare('SELECT * FROM movies WHERE id = ?').get(id);
+};
+
+exports.update = function(id, title, year, actors, plot, poster) {
+  const movie = db.prepare('SELECT * FROM movies WHERE id = ?').get(id);
+
+  // Update the movie in the database
+  db.prepare('UPDATE movies SET title = ?, year = ?, actors = ?, plot = ?, poster = ? WHERE id = ?')
+    .run(title, year, actors, plot, poster, id);
+
+  // Update the movie in the JSON file
+  if (movie) {
+    const movies = JSON.parse(fs.readFileSync('movies.json'));
+    movies[movie.id] = {
+      id: movie.id,
+      title: title,
+      year: year,
+      actors: actors,
+      plot: plot,
+      poster: poster
+    };
+    fs.writeFileSync('movies.json', JSON.stringify(movies));
+  }
+};
+
+
+exports.delete = function(id) {
+  db.prepare('DELETE FROM movies WHERE id = ?').run(id);
+
+  // read the current content of movies.json
+  let movies = JSON.parse(fs.readFileSync('movies.json', 'utf8'));
+
+  // remove the deleted movie from the in-memory object
+  delete movies[id];
+
+  // write the updated movie list to movies.json
+  fs.writeFileSync('movies.json', JSON.stringify(movies, null, 2));
+};
+

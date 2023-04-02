@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Films : détails</title>
+</head>
+
+<body>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4d4d4d;
+        }
+
+        p {
+            color: #4d4d4d;
+        }
+
+        img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 30%;
+        }
+
+        div {
+            text-align: center;
+        }
+
+        button {
+            background-color: #4d4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #333333;
+        }
+    </style>
+
+    <div>
+        <button onclick="location.href='/'">Liste des films</button>
+        <button onclick="location.href='/add-movie-form'">Ajouter un film</button>
+        <button onclick="location.href='/edit-movie-form/{{id}}'">Modifier ce film</button>
+        <button onclick="location.href='/delete-movie-form/{{id}}'">Supprimer ce film</button>
+    </div>
+    <br>
+
+    <h1>{{title}}</h1>
+    <p>Année : {{year}}</p>
+    <p>Acteurs : {{actors}}</p>
+    <p>Résumé : {{plot}}</p>
+    <img src="{{poster}}">
+
+
+</body>
+
+</html>

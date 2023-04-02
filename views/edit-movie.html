@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Films : modifier un film</title>
+</head>
+
+<body>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        form {
+            width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input,
+        textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background-color: #4d4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #333333;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+    <h1>Modifier un film</h1>
+    <form action="/edit-movie/{{id}}" method="post">
+        Titre: <input type="text" name="title" value="{{title}}"><br>
+        Année: <input type="text" name="year" value="{{year}}"><br>
+        Acteurs: <input type="text" name="actors" value="{{actors}}"><br>
+        Résumé: <textarea name="plot">{{plot}}</textarea><br>
+        Affiche: <input type="text" name="poster" value="{{poster}}"><br>
+        <input type="submit" value="Modifier">
+    </form>
+</body>
+
+</html>
